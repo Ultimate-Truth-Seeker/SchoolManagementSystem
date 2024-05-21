@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GestorAcademico {
+public class GestorAcademico implements ServiciosAcademicos {
     //atributos
     
     private ArrayList<Estudiante> estudiantes;
@@ -39,6 +39,51 @@ public class GestorAcademico {
 
     public void setAsignaciones(HashMap<Curso, ArrayList<Estudiante>> asignaciones) {
         this.asignaciones = asignaciones;
+    }
+
+    //métodos de la interfaz
+    @Override
+    public void matricularEstudiante(Estudiante estudiante) {
+        estudiantes.add(estudiante);
+    }
+
+    @Override
+    public void agregarCurso(Curso curso) {
+        cursos.add(curso);
+        asignaciones.put(curso, new ArrayList<>());
+    }
+
+    @Override
+    public void inscribirEstudianteCurso(Estudiante estudiante, int idCurso) throws EstudianteYaInscritoException {
+        Curso curso = null;
+        for (Curso c : cursos) {
+            if (idCurso == c.getId()) {
+                curso = c;
+                break;
+            }
+        }
+        if (asignaciones.get(curso).contains(estudiante)) {
+            throw new EstudianteYaInscritoException("Error en la asignación: ");
+        }
+        asignaciones.get(curso).add(estudiante);
+    }
+
+    @Override
+    public void desinscribirEstudianteCurso(int idEstudiante, int idCurso) throws EstudianteNoInscritoEnCursoException {
+        Curso curso = null;
+        for (Curso c : cursos) {
+            if (idCurso == c.getId()) {
+                curso = c;
+                break;
+            }
+        }
+        for (Estudiante e: asignaciones.get(curso)) {
+            if (idEstudiante == e.getId()) {
+                asignaciones.get(curso).remove(e);
+                return;
+            }
+        }
+        throw new EstudianteNoInscritoEnCursoException("Error en la desasignación: ");
     }
 
     
