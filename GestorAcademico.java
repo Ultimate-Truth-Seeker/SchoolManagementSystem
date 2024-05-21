@@ -45,6 +45,7 @@ public class GestorAcademico implements ServiciosAcademicos {
     @Override
     public void matricularEstudiante(Estudiante estudiante) {
         estudiantes.add(estudiante);
+        estudiante.setEstado("matriculado");
     }
 
     @Override
@@ -66,6 +67,7 @@ public class GestorAcademico implements ServiciosAcademicos {
             throw new EstudianteYaInscritoException("Error en la asignación: ");
         }
         asignaciones.get(curso).add(estudiante);
+        System.out.println("Estudainte inscrito");
     }
 
     @Override
@@ -80,6 +82,7 @@ public class GestorAcademico implements ServiciosAcademicos {
         for (Estudiante e: asignaciones.get(curso)) {
             if (idEstudiante == e.getId()) {
                 asignaciones.get(curso).remove(e);
+                System.out.println("Estudiante desinscrito");
                 return;
             }
         }
